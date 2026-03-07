@@ -1,0 +1,39 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+menv/
+venv/
+env/
+.venv/
+
+
+# fine-tuned model directory
+deberta_movie_genre_model_gpu_v1
+
+# Data files
+*.csv
+
+# Model files (optional)
+*.cbm
+*.pkl
+*.joblib
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Streamlit cache
+.streamlit/
+
+# VS Code
+.vscode/
+
+# Environment variables
+.env
