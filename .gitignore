@@ -21,6 +21,7 @@ deberta_movie_genre_model_gpu_v1
 *.cbm
 *.pkl
 *.joblib
+*.keras
 
 # Logs
 *.log
