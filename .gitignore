@@ -12,8 +12,7 @@ env/
 
 
 
-credit_fraud_detection.cmb
-
+model/credit_fraud_detection.cmb
 # fine-tuned model directory
 deberta_movie_genre_model_gpu_v1
 
