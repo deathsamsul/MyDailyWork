@@ -1,6 +1,6 @@
 import pandas as pd
 from catboost import CatBoostClassifier
-from schem import feature_engineering
+from task_2_credit_card_fraud_detecation.schem import feature_engineering
 
 
 
@@ -19,4 +19,4 @@ def predict_fraud(input_data):
     prediction = model.predict(df)[0]
     probability = model.predict_proba(df)[0][1]
 
-    return prediction, probability
+    return int(prediction), float(probability)

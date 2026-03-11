@@ -1,12 +1,15 @@
 import streamlit as st
-import pandas as pd
+import requests
 import plotly.express as px
-from predictor import predict_fraud
+
+
+
+# streamlit run task_2_credit_card_fraud_detecation/app.py
 
 
 
 
-
+API_URL = "http://127.0.0.1:8000/predict"
 
 
 st.set_page_config(page_title="Credit Card Fraud Detection", layout="centered")
@@ -28,7 +31,7 @@ st.divider()
 
 # Sample Transactions
 
-st.subheader(" Try Sample Transactions")
+st.subheader("Try Sample Transactions")
 
 col1, col2 = st.columns(2)
 
@@ -78,7 +81,6 @@ sample = st.session_state.get("sample", {})
 
 st.divider()
 
-
 # Input Tabs
 
 tab1, tab2, tab3 = st.tabs([
@@ -117,7 +119,6 @@ with tab1:
     )
 
 # Customer Tab
-
 
 with tab2:
 
@@ -183,7 +184,6 @@ with tab3:
 
 st.divider()
 
-
 # Prediction
 
 if st.button("Predict Fraud"):
@@ -207,37 +207,46 @@ if st.button("Predict Fraud"):
         "dob": dob
     }
 
-    pred, prob = predict_fraud(input_data)
+    try:
 
-    st.subheader("📊 Prediction Result")
+        response = requests.post(API_URL, json=input_data)
 
-    # Fraud Message
-    if pred == 1:
-        st.error("⚠️ Fraudulent Transaction Detected!")
-    else:
-        st.success("✅ Legitimate Transaction")
+        result = response.json()
 
-    st.write(f"Fraud Probability: **{prob:.2%}**")
+        pred = result["prediction"]
+        prob = result["fraud_probability"]
 
-    # Risk Level
-    if prob < 0.3:
-        st.success("🟢 Low Fraud Risk")
-    elif prob < 0.7:
-        st.warning("🟡 Medium Fraud Risk")
-    else:
-        st.error("🔴 High Fraud Risk")
+        st.subheader("📊 Prediction Result")
 
-    # Donut Chart
+        if pred == 1:
+            st.error("⚠️ Fraudulent Transaction Detected!")
+        else:
+            st.success("✅ Legitimate Transaction")
 
-    fraud_prob = prob
-    legit_prob = 1 - prob
+        st.write(f"Fraud Probability: **{prob:.2%}**")
 
-    fig = px.pie(
-        names=["Legitimate", "Fraud"],
-        values=[legit_prob, fraud_prob],
-        hole=0.6
-    )
+        if prob < 0.3:
+            st.success("🟢 Low Fraud Risk")
+        elif prob < 0.7:
+            st.warning("🟡 Medium Fraud Risk")
+        else:
+            st.error("🔴 High Fraud Risk")
 
-    fig.update_traces(textinfo="percent+label")
+        # Donut Chart
 
-    st.plotly_chart(fig)
+        fraud_prob = prob
+        legit_prob = 1 - prob
+
+        fig = px.pie(
+            names=["Legitimate", "Fraud"],
+            values=[legit_prob, fraud_prob],
+            hole=0.6
+        )
+
+        fig.update_traces(textinfo="percent+label")
+
+        st.plotly_chart(fig)
+
+    except Exception as e:
+
+        st.error("API connection failed. Make sure FastAPI server is running.")
