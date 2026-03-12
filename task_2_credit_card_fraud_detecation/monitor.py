@@ -9,6 +9,8 @@ import plotly.figure_factory as ff
 
 # streamlit run task_2_credit_card_fraud_detecation/monitor.py
 
+
+
 API_UPDATE_URL = "http://127.0.0.1:8000/update_label"
 
 st.set_page_config(page_title="Fraud Monitoring Dashboard", layout="wide")
@@ -24,11 +26,10 @@ df = pd.read_sql("SELECT * FROM predictions", conn)
 df["prediction"] = df["prediction"].astype(int)
 df["actual_label"] = pd.to_numeric(df["actual_label"], errors="coerce")
 
-# -----------------------------
-# ROW 1
-# Prediction Overview | Model Performance
-# -----------------------------
 
+
+
+# Prediction Overview | Model Performance
 col1, col2 = st.columns(2)
 
 with col2:
